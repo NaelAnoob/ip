@@ -29,7 +29,7 @@ public class Jackbit {
 
         System.out.println("\n" + box + "\n \n POP!! I'm JackBit, but you can call me Jack! \n  Have anything to talk about?");
         Scanner chatter = new Scanner(System.in);
-        echo(chatter);
+        add_list(chatter);
     }
 
     private static void echo(Scanner chatter){
@@ -41,5 +41,28 @@ public class Jackbit {
         System.out.println("\n ________________________________ \n\n See you later!!");
     }
 
+    private static void add_list(Scanner chatter){
+        String[] list = new String[100];
+        String msg = chatter.nextLine();
+        int i = 0;
 
+        while (!msg.equals("bye")){
+
+            if (msg.equals("list")) {
+                for (int c = 1; c <= i; c++){
+                    System.out.println(c + ". " + list[c-1]);
+                }
+            } else {
+                list[i] = msg;
+                i++;
+                System.out.println("added: " + msg);
+            }
+            
+            msg = chatter.nextLine();
+
+        }
+
+        System.out.println("\n ________________________________ \n\n See you later!!");
+
+    }
 }
