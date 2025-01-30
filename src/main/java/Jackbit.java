@@ -31,7 +31,8 @@ public class Jackbit {
         Scanner chatter = new Scanner(System.in);
         echo(chatter);
     }
-    public static void echo(Scanner chatter){
+
+    private static void echo(Scanner chatter){
         String msg = chatter.nextLine();
         while (!msg.equals("bye")) {
             System.out.println(msg);
@@ -39,4 +40,6 @@ public class Jackbit {
         }
         System.out.println("\n ________________________________ \n\n See you later!!");
     }
+
+
 }
