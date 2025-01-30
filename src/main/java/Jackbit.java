@@ -1,7 +1,7 @@
 import java.util.Scanner;
 public class Jackbit {
 
-    public class Task {
+    public static class Task {
         private boolean done;
         private final String name;
 
@@ -12,12 +12,12 @@ public class Jackbit {
 
         public void mark(){
             this.done = true;
-            System.out.println("Nice! I've marked this task as done: \n     " + this.toString());
+            System.out.println("Nice! I've marked this task as done: \n     " + this);
         }
 
         public void unmark(){
             this.done = false;
-            System.out.println("OK, I've marked this task as not done yet: \n     " + this.toString());
+            System.out.println("OK, I've marked this task as not done yet: \n     " + this);
         }
 
         public String toString(){
@@ -55,7 +55,7 @@ public class Jackbit {
 
         System.out.println("\n" + box + "\n \n POP!! I'm JackBit, but you can call me Jack! \n  Have anything to talk about?");
         Scanner chatter = new Scanner(System.in);
-        add_list(chatter);
+        task_list(chatter);
     }
 
     private static void echo(Scanner chatter){
@@ -67,19 +67,27 @@ public class Jackbit {
         System.out.println("\n ________________________________ \n\n See you later!!");
     }
 
-    private static void add_list(Scanner chatter){
-        String[] list = new String[100];
+    private static void task_list(Scanner chatter){
+        Task[] task_list = new Task[100];
         String msg = chatter.nextLine();
         int i = 0;
+        Integer marker;
 
         while (!msg.equals("bye")){
 
             if (msg.equals("list")) {
+                System.out.println("Here are the tasks in your task_list: \n");
                 for (int c = 1; c <= i; c++){
-                    System.out.println(c + ". " + list[c-1]);
+                    System.out.println(c + "." + task_list[c-1]);
                 }
+            } else if (msg.startsWith("mark")) {
+                marker = Integer.valueOf(msg.substring(msg.length() - 1));
+                task_list[marker - 1].mark();
+            } else if (msg.startsWith("unmark")) {
+                marker = Integer.valueOf(msg.substring(msg.length() - 1));
+                task_list[marker - 1].unmark();
             } else {
-                list[i] = msg;
+                task_list[i] = new Task(msg);
                 i++;
                 System.out.println("added: " + msg);
             }
