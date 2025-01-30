@@ -1,5 +1,31 @@
 import java.util.Scanner;
 public class Jackbit {
+
+    public class Task {
+        private boolean done;
+        private final String name;
+
+        public Task(String name){
+            this.done = false;
+            this.name = name;
+        }
+
+        public void mark(){
+            this.done = true;
+            System.out.println("Nice! I've marked this task as done: \n     " + this.toString());
+        }
+
+        public void unmark(){
+            this.done = false;
+            System.out.println("OK, I've marked this task as not done yet: \n     " + this.toString());
+        }
+
+        public String toString(){
+            String mark = !this.done ? "[]" : "[X]";
+            return mark + " " + name;
+        }
+    }
+
     public static void main(String[] args) {
         String box =    "       XXXXXXXXXXXXXXXXX        \n" +
                         "     XXX     XX  XX    XX       \n" +
@@ -57,7 +83,7 @@ public class Jackbit {
                 i++;
                 System.out.println("added: " + msg);
             }
-            
+
             msg = chatter.nextLine();
 
         }
