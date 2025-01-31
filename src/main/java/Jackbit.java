@@ -73,6 +73,14 @@ public class Jackbit {
     }
 
 
+    public static class JackbitException extends Exception {
+        public JackbitException(String errorMessage) {
+            super(errorMessage);
+        }
+
+    }
+
+
 
     public static void main(String[] args) {
         String box =    "       XXXXXXXXXXXXXXXXX        \n" +
@@ -115,7 +123,7 @@ public class Jackbit {
         System.out.println("\n ________________________________ \n\n See you later!!");
     }
 
-    private static void task_list(Scanner chatter){
+    private static void task_list(Scanner chatter) {
         Task[] task_list = new Task[100];
         String msg = chatter.nextLine();
         int i = 0;
@@ -140,6 +148,13 @@ public class Jackbit {
             
             else { //Adding to list
                 if (msg.startsWith("todo")) {
+                    if (msg.length() < 6) {
+                        try {
+                            throw new JackbitException("You need to wind me up a little more bud. Give me more to work with and write your task fully.");
+                        } catch (JackbitException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
                     task_list[i] = new Todo(msg);
                 } else if (msg.startsWith("deadline")) {
                     String name = msg.substring(9,msg.indexOf("/by"));
@@ -150,6 +165,12 @@ public class Jackbit {
                     String from = msg.substring(msg.indexOf("/from") + 6, msg.indexOf("/to"));
                     String to = msg.substring(msg.indexOf("/to") + 4);
                     task_list[i] = new Event(name, from, to);
+                } else {
+                    try {
+                        throw new JackbitException("First rule you learn in clown school: Random gibberish is never funny");
+                    } catch (JackbitException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
 
                 System.out.println("I've added this task: \n" + task_list[i] + "\n The number of tasks you have is " + (i+1));
