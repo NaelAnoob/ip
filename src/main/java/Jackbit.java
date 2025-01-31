@@ -127,14 +127,14 @@ public class Jackbit {
 
     private static void task_list(Scanner chatter, ArrayList<Task> taskList) {
         String msg = chatter.nextLine();
-        int i = 0;
+        int index = 0;
         Integer marker;
 
         while (!msg.equals("bye")){
 
             if (msg.equals("list")) {
                 System.out.println("Here are the tasks in your task_list: \n");
-                for (int c = 1; c <= i; c++){
+                for (int c = 1; c <= index; c++){
                     System.out.println(c + "." + taskList.get(c - 1));
                 }
             } else if (msg.startsWith("mark")) {
@@ -145,9 +145,9 @@ public class Jackbit {
                 taskList.get(marker - 1).unmark();
             } else if (msg.startsWith("delete")) {
                 marker = Integer.valueOf(msg.substring(msg.length() - 1));
-                i--;
+                index--;
 
-                System.out.println("I have removed this task from your task_list: \n" + taskList.get(marker - 1) + "\n The number of tasks you have is " + i);
+                System.out.println("I have removed this task from your task_list: \n" + taskList.get(marker - 1) + "\n The number of tasks you have is " + index);
                 taskList.remove(marker.intValue() - 1);
 
             }
@@ -162,16 +162,16 @@ public class Jackbit {
                             throw new RuntimeException(e);
                         }
                     }
-                    taskList.add(i, new Todo(msg));
+                    taskList.add(index, new Todo(msg));
                 } else if (msg.startsWith("deadline")) {
                     String name = msg.substring(9,msg.indexOf("/by"));
                     String by = msg.substring(msg.indexOf("/by") + 4);
-                    taskList.add(i, new Deadline(name, by));
+                    taskList.add(index, new Deadline(name, by));
                 } else if (msg.startsWith("event")) {
                     String name = msg.substring(6,msg.indexOf("/from"));
                     String from = msg.substring(msg.indexOf("/from") + 6, msg.indexOf("/to"));
                     String to = msg.substring(msg.indexOf("/to") + 4);
-                    taskList.add(i, new Event(name, from, to));
+                    taskList.add(index, new Event(name, from, to));
                 } else {
                     try {
                         throw new JackbitException("First rule you learn in clown school: Random gibberish is never funny");
@@ -181,9 +181,9 @@ public class Jackbit {
                 }
 
 
-                System.out.println("I've added this task: \n" + taskList.get(i) + "\n The number of tasks you have is " + (i + 1));
+                System.out.println("I've added this task: \n" + taskList.get(index) + "\n The number of tasks you have is " + (index + 1));
 
-                i++;
+                index++;
 
 
             }
