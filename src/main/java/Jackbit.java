@@ -1,6 +1,8 @@
 import java.util.Scanner;
 public class Jackbit {
 
+
+
     public static class Task {
         private boolean done;
         private final String name;
@@ -25,6 +27,52 @@ public class Jackbit {
             return mark + " " + name;
         }
     }
+
+    public class Todo extends Task {
+
+        public Todo(String name) {
+            super(name);
+        }
+
+        @Override
+        public String toString() {
+            return "[T]" + super.toString();
+        }
+    }
+
+    public class Deadline extends Task {
+
+        private String by;
+
+        public Deadline(String name, String by) {
+            super(name);
+            this.by = by;
+        }
+
+        @Override
+        public String toString() {
+            return "[D]" + super.toString() + " (by: " + by + ")";
+        }
+    }
+
+    public class Event extends Task {
+
+        private String from;
+        private String to;
+
+        public Event(String name, String from, String to) {
+            super(name);
+            this.from = from;
+            this.to = to;
+        }
+
+        @Override
+        public String toString() {
+            return "[E]" + super.toString() + " (from: " + from + " to: " + to + ")";
+        }
+    }
+
+
 
     public static void main(String[] args) {
         String box =    "       XXXXXXXXXXXXXXXXX        \n" +
