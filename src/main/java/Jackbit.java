@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 public class Jackbit {
 
@@ -83,6 +84,7 @@ public class Jackbit {
 
 
     public static void main(String[] args) {
+        ArrayList<Task> taskList = new ArrayList<>(100);
         String box =    "       XXXXXXXXXXXXXXXXX        \n" +
                         "     XXX     XX  XX    XX       \n" +
                         "   XX        XX  XX     X       \n" +
@@ -111,7 +113,7 @@ public class Jackbit {
 
         System.out.println("\n" + box + "\n \n POP!! I'm JackBit, but you can call me Jack! \n  Have anything to talk about?");
         Scanner chatter = new Scanner(System.in);
-        task_list(chatter);
+        task_list(chatter, taskList);
     }
 
     private static void echo(Scanner chatter){
@@ -123,8 +125,7 @@ public class Jackbit {
         System.out.println("\n ________________________________ \n\n See you later!!");
     }
 
-    private static void task_list(Scanner chatter) {
-        Task[] task_list = new Task[100];
+    private static void task_list(Scanner chatter, ArrayList<Task> taskList) {
         String msg = chatter.nextLine();
         int i = 0;
         Integer marker;
@@ -134,18 +135,24 @@ public class Jackbit {
             if (msg.equals("list")) {
                 System.out.println("Here are the tasks in your task_list: \n");
                 for (int c = 1; c <= i; c++){
-                    System.out.println(c + "." + task_list[c-1]);
+                    System.out.println(c + "." + taskList.get(c - 1));
                 }
             } else if (msg.startsWith("mark")) {
                 marker = Integer.valueOf(msg.substring(msg.length() - 1));
-                task_list[marker - 1].mark();
+                taskList.get(marker - 1).mark();
             } else if (msg.startsWith("unmark")) {
                 marker = Integer.valueOf(msg.substring(msg.length() - 1));
-                task_list[marker - 1].unmark();
-            } 
-            
-            
-            
+                taskList.get(marker - 1).unmark();
+            } else if (msg.startsWith("delete")) {
+                marker = Integer.valueOf(msg.substring(msg.length() - 1));
+                i--;
+
+                System.out.println("I have removed this task from your task_list: \n" + taskList.get(marker - 1) + "\n The number of tasks you have is " + i);
+                taskList.remove(marker.intValue() - 1);
+
+            }
+
+
             else { //Adding to list
                 if (msg.startsWith("todo")) {
                     if (msg.length() < 6) {
@@ -155,16 +162,16 @@ public class Jackbit {
                             throw new RuntimeException(e);
                         }
                     }
-                    task_list[i] = new Todo(msg);
+                    taskList.add(i, new Todo(msg));
                 } else if (msg.startsWith("deadline")) {
                     String name = msg.substring(9,msg.indexOf("/by"));
                     String by = msg.substring(msg.indexOf("/by") + 4);
-                    task_list[i] = new Deadline(name, by);
+                    taskList.add(i, new Deadline(name, by));
                 } else if (msg.startsWith("event")) {
                     String name = msg.substring(6,msg.indexOf("/from"));
                     String from = msg.substring(msg.indexOf("/from") + 6, msg.indexOf("/to"));
                     String to = msg.substring(msg.indexOf("/to") + 4);
-                    task_list[i] = new Event(name, from, to);
+                    taskList.add(i, new Event(name, from, to));
                 } else {
                     try {
                         throw new JackbitException("First rule you learn in clown school: Random gibberish is never funny");
@@ -173,9 +180,11 @@ public class Jackbit {
                     }
                 }
 
-                System.out.println("I've added this task: \n" + task_list[i] + "\n The number of tasks you have is " + (i+1));
+
+                System.out.println("I've added this task: \n" + taskList.get(i) + "\n The number of tasks you have is " + (i + 1));
 
                 i++;
+
 
             }
 
