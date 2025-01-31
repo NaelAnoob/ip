@@ -28,7 +28,7 @@ public class Jackbit {
         }
     }
 
-    public class Todo extends Task {
+    public static class Todo extends Task {
 
         public Todo(String name) {
             super(name);
@@ -40,7 +40,7 @@ public class Jackbit {
         }
     }
 
-    public class Deadline extends Task {
+    public static class Deadline extends Task {
 
         private String by;
 
@@ -55,7 +55,7 @@ public class Jackbit {
         }
     }
 
-    public class Event extends Task {
+    public static class Event extends Task {
 
         private String from;
         private String to;
@@ -134,10 +134,28 @@ public class Jackbit {
             } else if (msg.startsWith("unmark")) {
                 marker = Integer.valueOf(msg.substring(msg.length() - 1));
                 task_list[marker - 1].unmark();
-            } else {
-                task_list[i] = new Task(msg);
+            } 
+            
+            
+            
+            else { //Adding to list
+                if (msg.startsWith("todo")) {
+                    task_list[i] = new Todo(msg);
+                } else if (msg.startsWith("deadline")) {
+                    String name = msg.substring(9,msg.indexOf("/by"));
+                    String by = msg.substring(msg.indexOf("/by") + 4);
+                    task_list[i] = new Deadline(name, by);
+                } else if (msg.startsWith("event")) {
+                    String name = msg.substring(6,msg.indexOf("/from"));
+                    String from = msg.substring(msg.indexOf("/from") + 6, msg.indexOf("/to"));
+                    String to = msg.substring(msg.indexOf("/to") + 4);
+                    task_list[i] = new Event(name, from, to);
+                }
+
+                System.out.println("I've added this task: \n" + task_list[i] + "\n The number of tasks you have is " + (i+1));
+
                 i++;
-                System.out.println("added: " + msg);
+
             }
 
             msg = chatter.nextLine();
