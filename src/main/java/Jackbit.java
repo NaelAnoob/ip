@@ -6,6 +6,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
 public class Jackbit {
 
 
@@ -32,7 +36,8 @@ public class Jackbit {
                 case "[D]" -> {
                     int nameEnd = description.indexOf("(by: ");
                     task = new Deadline(description.substring(6, nameEnd - 1),
-                                        description.substring(nameEnd + 5, description.length() - 1));
+                                        description.substring(nameEnd + 5, description.length() - 1),
+                                        true);
                     break;
                 }
                 case "[E]" -> {
@@ -40,7 +45,8 @@ public class Jackbit {
                     int fromEnd = description.indexOf("to: ");
                     task = new Event(description.substring(6, nameEnd - 1),
                                         description.substring(nameEnd + "(from: ".length(), fromEnd - 1),
-                                        description.substring(fromEnd + "to: ".length(), description.length() - 1));
+                                        description.substring(fromEnd + "to: ".length(), description.length() - 1),
+                                        true);
                     break;
                 }
 
@@ -55,12 +61,9 @@ public class Jackbit {
 
         public void mark(){
             this.done = true;
-
         }
-
         public void unmark(){
             this.done = false;
-
         }
 
 
@@ -87,33 +90,55 @@ public class Jackbit {
 
     public static class Deadline extends Task {
 
-        private String by;
+        private LocalDate by;
 
         public Deadline(String name, String by) {
             super(name);
-            this.by = by;
+            this.by = LocalDate.parse(by);
+        }
+
+        public Deadline(String name, String by, boolean mDY) {
+            super(name);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy");
+            if (mDY) {
+                this.by = LocalDate.parse(by, formatter);
+            } else {
+                this.by = LocalDate.parse(by);
+            }
+
         }
 
         @Override
         public String toString() {
-            return "[D]" + super.toString() + " (by: " + by + ")";
+            return "[D]" + super.toString() + " (by: " + by.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
         }
     }
 
     public static class Event extends Task {
 
-        private String from;
-        private String to;
+        private LocalDate from;
+        private LocalDate to;
 
         public Event(String name, String from, String to) {
             super(name);
-            this.from = from;
-            this.to = to;
+            this.from = LocalDate.parse(from);
+            this.to = LocalDate.parse(to);
+
+        }
+
+        public Event(String name, String from, String to, boolean mDY) {
+            super(name);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d yyyy");
+            this.from = LocalDate.parse(from, formatter);
+            this.to = LocalDate.parse(to, formatter);
+
         }
 
         @Override
         public String toString() {
-            return "[E]" + super.toString() + " (from: " + from + " to: " + to + ")";
+            return "[E]" + super.toString()
+                    + " (from: " + from.format(DateTimeFormatter.ofPattern("MMM d yyyy"))
+                    + " to: " + to.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";
         }
     }
 
@@ -225,7 +250,7 @@ public class Jackbit {
                     taskList.add(index, new Deadline(name, by));
                 } else if (msg.startsWith("event")) {
                     String name = msg.substring(6,msg.indexOf("/from"));
-                    String from = msg.substring(msg.indexOf("/from") + 6, msg.indexOf("/to"));
+                    String from = msg.substring(msg.indexOf("/from") + 6, msg.indexOf("/to") - 1);
                     String to = msg.substring(msg.indexOf("/to") + 4);
                     taskList.add(index, new Event(name, from, to));
                 } else {
