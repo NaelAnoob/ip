@@ -1,5 +1,11 @@
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Scanner;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.File;
+
 public class Jackbit {
 
 
@@ -13,20 +19,58 @@ public class Jackbit {
             this.name = name;
         }
 
+        public static Task toTask(String description) {
+            String type = description.substring(0,3);
+            boolean descDone = description.substring(3, 6).equals("[X]");
+            Task task = null;
+
+            switch (type) {
+                case "[T]" -> {
+                    task = new Todo(description.substring(6));
+                    break;
+                }
+                case "[D]" -> {
+                    int nameEnd = description.indexOf("(by: ");
+                    task = new Deadline(description.substring(6, nameEnd - 1),
+                                        description.substring(nameEnd + 5, description.length() - 1));
+                    break;
+                }
+                case "[E]" -> {
+                    int nameEnd = description.indexOf("(from: ");
+                    int fromEnd = description.indexOf("to: ");
+                    task = new Event(description.substring(6, nameEnd - 1),
+                                        description.substring(nameEnd + "(from: ".length(), fromEnd - 1),
+                                        description.substring(fromEnd + "to: ".length(), description.length() - 1));
+                    break;
+                }
+
+            }
+
+            if (descDone) {task.mark();}
+
+            return task;
+        }
+
+
+
         public void mark(){
             this.done = true;
-            System.out.println("Nice! I've marked this task as done: \n     " + this);
+
         }
 
         public void unmark(){
             this.done = false;
-            System.out.println("OK, I've marked this task as not done yet: \n     " + this);
+
         }
 
+
+
         public String toString(){
-            String mark = !this.done ? "[]" : "[X]";
+            String mark = !this.done ? "[ ]" : "[X]";
             return mark + " " + name;
         }
+
+
     }
 
     public static class Todo extends Task {
@@ -84,32 +128,39 @@ public class Jackbit {
 
 
     public static void main(String[] args) {
-        ArrayList<Task> taskList = new ArrayList<>(100);
-        String box =    "       XXXXXXXXXXXXXXXXX        \n" +
-                        "     XXX     XX  XX    XX       \n" +
-                        "   XX        XX  XX     X       \n" +
-                        "   XX                   X       \n" +
-                        "    X        X    X     X       \n" +
-                        "    X        XXXXXX     X       \n" +
-                        "     X                 XX       \n" +
-                        "     XXXXXXXXXXXXXXXXXXX        \n" +
-                        "            XXXX                \n" +
-                        "          XXXX                  \n" +
-                        "           XXXX                 \n" +
-                        "            XXXXX               \n" +
-                        " XXX     XXXX             XXXX  \n" +
-                        "   XXX    XXXX          XXX     \n" +
-                        "    XXX     XXXX       XXX      \n" +
-                        "     XXXXXXXXXXXXXXXXXXXX       \n" +
-                        "     XXXXXXXXXXXXXXXXXXXX       \n" +
-                        "     XXXXXXXXXXXXXXXXXXXX       \n" +
-                        "     XXXXXXXXXXXXXXXXXXXX       \n" +
-                        "     XXXXXXXXXXXXXXXXXXXX       \n" +
-                        "     XXXXXXXXXXXXXXXXXXXX       \n" +
-                        "     XXXXXXXXXXXXXXXXXXXX       \n" +
-                        "     XXXXXXXXXXXXXXXXXXXX       \n" +
-                        "     XXXXXXXXXXXXXXXXXXXX       \n" +
-                        "     XXXXXXXXXXXXXXXXXXXX       ";
+
+        ArrayList<Task> taskList;
+        try {
+            taskList = loadTasks();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        String box = "       XXXXXXXXXXXXXXXXX        \n" +
+                "     XXX     XX  XX    XX       \n" +
+                "   XX        XX  XX     X       \n" +
+                "   XX                   X       \n" +
+                "    X        X    X     X       \n" +
+                "    X        XXXXXX     X       \n" +
+                "     X                 XX       \n" +
+                "     XXXXXXXXXXXXXXXXXXX        \n" +
+                "            XXXX                \n" +
+                "          XXXX                  \n" +
+                "           XXXX                 \n" +
+                "            XXXXX               \n" +
+                " XXX     XXXX             XXXX  \n" +
+                "   XXX    XXXX          XXX     \n" +
+                "    XXX     XXXX       XXX      \n" +
+                "     XXXXXXXXXXXXXXXXXXXX       \n" +
+                "     XXXXXXXXXXXXXXXXXXXX       \n" +
+                "     XXXXXXXXXXXXXXXXXXXX       \n" +
+                "     XXXXXXXXXXXXXXXXXXXX       \n" +
+                "     XXXXXXXXXXXXXXXXXXXX       \n" +
+                "     XXXXXXXXXXXXXXXXXXXX       \n" +
+                "     XXXXXXXXXXXXXXXXXXXX       \n" +
+                "     XXXXXXXXXXXXXXXXXXXX       \n" +
+                "     XXXXXXXXXXXXXXXXXXXX       \n" +
+                "     XXXXXXXXXXXXXXXXXXXX       ";
 
         System.out.println("\n" + box + "\n \n POP!! I'm JackBit, but you can call me Jack! \n  Have anything to talk about?");
         Scanner chatter = new Scanner(System.in);
@@ -127,7 +178,7 @@ public class Jackbit {
 
     private static void task_list(Scanner chatter, ArrayList<Task> taskList) {
         String msg = chatter.nextLine();
-        int index = 0;
+        int index = taskList.size();
         Integer marker;
 
         while (!msg.equals("bye")){
@@ -139,10 +190,15 @@ public class Jackbit {
                 }
             } else if (msg.startsWith("mark")) {
                 marker = Integer.valueOf(msg.substring(msg.length() - 1));
-                taskList.get(marker - 1).mark();
+                Task task = taskList.get(marker - 1);
+                task.mark();
+                System.out.println("Nice! I've marked this task as done: \n     " + task);
+
             } else if (msg.startsWith("unmark")) {
                 marker = Integer.valueOf(msg.substring(msg.length() - 1));
-                taskList.get(marker - 1).unmark();
+                Task task = taskList.get(marker - 1);
+                task.unmark();
+                System.out.println("OK, I've marked this task as not done yet: \n     " + task);
             } else if (msg.startsWith("delete")) {
                 marker = Integer.valueOf(msg.substring(msg.length() - 1));
                 index--;
@@ -193,6 +249,48 @@ public class Jackbit {
         }
 
         System.out.println("\n ________________________________ \n\n See you later!!");
+        try {
+            saveTasks(taskList);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
     }
+
+    private static void saveTasks(ArrayList<Task> taskList) throws IOException {
+        FileWriter newData = new FileWriter("./data/jackbit.txt");
+
+        for (Task task : taskList) {
+            newData.write(task.toString() + "\n");
+        }
+
+        newData.close();
+
+    }
+
+    private static ArrayList<Task> loadTasks() throws FileNotFoundException {
+        File taskData = new File("./data/jackbit.txt");
+        Scanner s = new Scanner(taskData);
+        int i = 1;
+        ArrayList<Task> taskList = new ArrayList<>(100);
+
+        while (s.hasNext()) {
+
+            Task task = Task.toTask(s.nextLine());
+            System.out.println(i + ". " + task.toString());
+            taskList.add(task);
+            i++;
+        }
+
+        return taskList;
+    }
+
+
+
+
+
+
+    // END OF JACKBIT CLASS
 }
+
+
