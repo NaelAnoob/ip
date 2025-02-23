@@ -45,7 +45,9 @@ public class Task {
     }
 
 
-
+    public String getName() {
+        return this.name;
+    }
     public void mark(){
         this.done = true;
     }
