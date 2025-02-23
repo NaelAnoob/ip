@@ -61,6 +61,15 @@ public class Task {
     }
 
     /**
+     * returns the name of the task
+     * @return String name of the task object
+     */
+
+    public String getName() {
+        return this.name;
+    }
+
+     /**
      * Marks the task as done.
      */
     public void mark() {

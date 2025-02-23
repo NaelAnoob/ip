@@ -1,3 +1,4 @@
-[T][ ] todo something 1
-[D][X] something 2  (by: Feb 25 2025)
-[E][ ] something 3  (from: Feb 25 2025 to: Feb 27 2025)
+[T][ ] something 1
+[T][ ] something 2
+[T][X] nothing 1
+[T][X] something 3

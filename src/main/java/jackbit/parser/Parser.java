@@ -40,8 +40,22 @@ public class Parser {
             deleteTask(command);
         } else if (command.startsWith("todo") || command.startsWith("deadline") || command.startsWith("event")) {
             addTask(command);
+        } else if (command.startsWith("find")) {
+            findTask(command);
         } else {
             throw new JackbitException("First rule you learn in clown school: Random gibberish is never funny");
+        }
+    }
+
+    private void findTask(String command) {
+        System.out.println("Here are the matching tasks in your list: \n");
+        int k = 1;
+        for (int i = 0; i < taskList.size(); i++) {
+            Task task = taskList.get(i);
+            if (task.getName().contains(command.substring(5))) {
+                System.out.println(k + ". " + taskList.get(i));
+                k++;
+            }
         }
     }
 
