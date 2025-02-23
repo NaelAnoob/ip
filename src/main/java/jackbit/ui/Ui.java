@@ -1,10 +1,7 @@
 package jackbit.ui;
 
-/**
- * Handles user interactions and displays messages.
- */
 public class Ui {
-    private final String box = "       XXXXXXXXXXXXXXXXX        \n" +
+    private final String BOX = "       XXXXXXXXXXXXXXXXX        \n" +
             "     XXX     XX  XX    XX       \n" +
             "   XX        XX  XX     X       \n" +
             "   XX                   X       \n" +
@@ -27,12 +24,12 @@ public class Ui {
             "     XXXXXXXXXXXXXXXXXXXX       \n" +
             "     XXXXXXXXXXXXXXXXXXXX       \n" +
             "     XXXXXXXXXXXXXXXXXXXX       \n" +
+            "     XXXXXXXXXXXXXXXXXXXX       \n" +
             "     XXXXXXXXXXXXXXXXXXXX       ";
 
-    /**
-     * Displays a welcome message with an ASCII art banner.
-     */
     public void welcome() {
-        System.out.println("\n" + box + "\n \n POP!! I'm JackBit, but you can call me Jack! \n  Have anything to talk about?");
+        System.out.println("\n" + BOX + "\n \n POP!! I'm JackBit, but you can call me Jack! \n  Have anything to talk about?");
     }
 }
+
+//END OF UI//

@@ -1,6 +1,7 @@
 package jackbit.tasklist;
 
 import jackbit.task.Task;
+
 import java.util.ArrayList;
 
 /**
@@ -23,7 +24,7 @@ public class TaskList {
      *
      * @return The size of the task list.
      */
-    public int size() {
+    public int getSize() {
         return taskList.size();
     }
 
@@ -65,3 +66,5 @@ public class TaskList {
         return taskList;
     }
 }
+
+//END OF TASKLIST//
