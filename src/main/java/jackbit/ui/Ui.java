@@ -1,7 +1,7 @@
 package jackbit.ui;
 
 public class Ui {
-    String box = "       XXXXXXXXXXXXXXXXX        \n" +
+    String BOX = "       XXXXXXXXXXXXXXXXX        \n" +
             "     XXX     XX  XX    XX       \n" +
             "   XX        XX  XX     X       \n" +
             "   XX                   X       \n" +
@@ -28,7 +28,7 @@ public class Ui {
             "     XXXXXXXXXXXXXXXXXXXX       ";
 
     public void welcome() {
-        System.out.println("\n" + box + "\n \n POP!! I'm JackBit, but you can call me Jack! \n  Have anything to talk about?");
+        System.out.println("\n" + BOX + "\n \n POP!! I'm JackBit, but you can call me Jack! \n  Have anything to talk about?");
     }
 }
 

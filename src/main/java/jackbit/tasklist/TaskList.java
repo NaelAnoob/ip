@@ -12,7 +12,7 @@ public class TaskList {
     }
 
 
-    public int size() {
+    public int getSize() {
         return taskList.size();
     }
 

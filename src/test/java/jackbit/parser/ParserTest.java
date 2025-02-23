@@ -4,7 +4,6 @@ import jackbit.Jackbit;
 import jackbit.tasklist.TaskList;
 import jackbit.task.Todo;
 import jackbit.task.Deadline;
-import jackbit.task.Event;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class ParserTest {
         } catch (Jackbit.JackbitException e) {
             throw new RuntimeException(e);
         }
-        assertEquals(1, taskList.size(), "TaskList should have one task.");
+        assertEquals(1, taskList.getSize(), "TaskList should have one task.");
         assertTrue(taskList.get(0) instanceof Todo, "The added task should be an instance of Todo.");
         assertEquals("[T][ ] something 1", taskList.get(0).toString(), "The Todo task should be formatted correctly.");
     }
@@ -38,7 +37,7 @@ public class ParserTest {
         } catch (Jackbit.JackbitException e) {
             throw new RuntimeException(e);
         }
-        assertEquals(1, taskList.size(), "TaskList should have one task.");
+        assertEquals(1, taskList.getSize(), "TaskList should have one task.");
         assertTrue(taskList.get(0) instanceof Deadline, "The added task should be an instance of Deadline.");
         assertEquals("[D][ ] meeting (by: Oct 31 2023)", taskList.get(0).toString(), "The Deadline task should be formatted correctly.");
     }
