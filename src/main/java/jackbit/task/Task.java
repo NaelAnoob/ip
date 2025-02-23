@@ -3,17 +3,31 @@ package jackbit.task;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * The Task class represents a generic task with a name and completion status.
+ */
 public class Task {
     private boolean done;
     private final String name;
 
-    public Task(String name){
+    /**
+     * Constructs a Task instance with the specified name.
+     *
+     * @param name The name of the task.
+     */
+    public Task(String name) {
         this.done = false;
         this.name = name;
     }
 
+    /**
+     * Converts a string description into a Task object.
+     *
+     * @param description The string description of the task.
+     * @return A Task object corresponding to the description.
+     */
     public static Task toTask(String description) {
-        String type = description.substring(0,3);
+        String type = description.substring(0, 3);
         boolean descDone = description.substring(3, 6).equals("[X]");
         Task task = null;
 
@@ -40,32 +54,29 @@ public class Task {
             }
         }
 
-        if (descDone) {task.mark();}
+        if (descDone) {
+            task.mark();
+        }
         return task;
     }
 
-
-
-    public void mark(){
+    /**
+     * Marks the task as done.
+     */
+    public void mark() {
         this.done = true;
     }
-    public void unmark(){
+
+    /**
+     * Marks the task as not done.
+     */
+    public void unmark() {
         this.done = false;
     }
 
-
-
-    public String toString(){
+    @Override
+    public String toString() {
         String mark = !this.done ? "[ ]" : "[X]";
         return mark + " " + name;
     }
 }
-
-
-
-
-
-
-
-
-//END OF TASK//
