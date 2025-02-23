@@ -8,8 +8,17 @@ import jackbit.task.Task;
 import jackbit.task.Todo;
 import jackbit.tasklist.TaskList;
 
+/**
+ * The Parser class is responsible for parsing user commands and executing corresponding actions.
+ */
 public class Parser {
     private TaskList taskList;
+
+    /**
+     * Constructs a Parser instance with the specified TaskList.
+     *
+     * @param taskList The TaskList to be managed by the parser.
+     */
     public Parser(TaskList taskList) {
         this.taskList = taskList;
     }
@@ -18,8 +27,9 @@ public class Parser {
      * Parses the user command and performs the corresponding action.
      *
      * @param command The user command to parse.
+     * @throws JackbitException If the command is invalid or incomplete.
      */
-    public void parse(String command) throws JackbitException{
+    public void parse(String command) throws JackbitException {
         if (command.equals("list")) {
             listTasks();
         } else if (command.startsWith("mark")) {
@@ -91,5 +101,3 @@ public class Parser {
         System.out.println("I've added this task: \n" + taskList.get(taskList.size() - 1) + "\n The number of tasks you have is " + taskList.size());
     }
 }
-
-// END OF PARSER //

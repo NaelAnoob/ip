@@ -11,26 +11,31 @@ import java.util.Scanner;
 
 import java.io.IOException;
 
+/**
+ * The main class for the Jackbit application.
+ * This class initializes the application and handles the main execution loop.
+ */
 public class Jackbit {
 
-    //TASKLIST//
-
-
+    /**
+     * Custom exception class for Jackbit-specific errors.
+     */
     public static class JackbitException extends Exception {
         public JackbitException(String errorMessage) {
             super(errorMessage);
         }
-
     }
-
-
 
     private Storage storage;
     private TaskList tasks;
     private Ui ui;
     private Parser parser;
 
-
+    /**
+     * Constructs a Jackbit instance with the specified file path for storage.
+     *
+     * @param filePath The path to the file where tasks are stored.
+     */
     public Jackbit(String filePath) {
         ui = new Ui();
         storage = new Storage(filePath);
@@ -42,14 +47,16 @@ public class Jackbit {
         parser = new Parser(tasks);
     }
 
-
+    /**
+     * Runs the Jackbit application.
+     * This method handles the main execution loop and processes user input.
+     */
     public void run() {
         ui.welcome();
         Scanner chatter = new Scanner(System.in);
         String msg = chatter.nextLine();
 
-        while (!msg.equals("bye")){
-
+        while (!msg.equals("bye")) {
             try {
                 parser.parse(msg);
                 msg = chatter.nextLine();
@@ -61,7 +68,6 @@ public class Jackbit {
                 }
                 throw new RuntimeException(e);
             }
-
         }
 
         System.out.println("\n ________________________________ \n\n See you later!!");
@@ -71,18 +77,18 @@ public class Jackbit {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
-
-
+    /**
+     * The main method to start the Jackbit application.
+     *
+     * @param args Command-line arguments (not used).
+     */
     public static void main(String[] args) {
-
         new Jackbit("data/jackbit.txt").run();
-
     }
 
-    private void echo(Scanner chatter){
+    private void echo(Scanner chatter) {
         String msg = chatter.nextLine();
         while (!msg.equals("bye")) {
             System.out.println(msg);
@@ -90,13 +96,4 @@ public class Jackbit {
         }
         System.out.println("\n ________________________________ \n\n See you later!!");
     }
-
-
-
-
-
-
-    // END OF JACKBIT CLASS
 }
-
-
