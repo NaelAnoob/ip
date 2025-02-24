@@ -11,29 +11,24 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-
-
-
 public class Main extends Application {
-
-
-    private Jackbit jackbit = new Jackbit("data/jackbit.txt");;
-
     @Override
     public void start(Stage stage) {
-
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
             Scene scene = new Scene(ap);
             stage.setScene(scene);
-            fxmlLoader.<MainWindow>getController().setJack(jackbit);  // inject the Duke instance
+
+            // Get the controller and set the Jackbit instance and stage
+            MainWindow controller = fxmlLoader.<MainWindow>getController();
+            controller.setJack(new Jackbit("data/jackbit.txt"));
+            controller.setStage(stage);
+
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
 }
 

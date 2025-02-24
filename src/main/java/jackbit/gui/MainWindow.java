@@ -10,6 +10,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
 /**
  * Controller for the main GUI.
  */
@@ -23,6 +25,8 @@ public class MainWindow extends AnchorPane {
     @FXML
     private Button sendButton;
 
+    private Stage stage;
+
     private Jackbit jackbit;
     private Ui ui;
 
@@ -32,11 +36,19 @@ public class MainWindow extends AnchorPane {
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        String welcomeMessage = new Ui().welcome();
+        dialogContainer.getChildren().addAll(
+                DialogBox.getJackDialog(welcomeMessage, jackImage)
+        );
     }
 
     /** Injects the Jackbit instance */
     public void setJack(Jackbit j) {
         jackbit = j;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 
     /**
@@ -52,5 +64,10 @@ public class MainWindow extends AnchorPane {
                 DialogBox.getJackDialog(response, jackImage)
         );
         userInput.clear();
+
+        // Close the stage if the user says "bye"
+        if (input.trim().equalsIgnoreCase("bye")) {
+            stage.close();
+        }
     }
 }
