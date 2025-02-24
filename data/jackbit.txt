@@ -1,4 +1,0 @@
-[T][ ]       something 1
-[T][ ]       something 2
-[T][X]       nothing 1
-[T][X]       something 3
