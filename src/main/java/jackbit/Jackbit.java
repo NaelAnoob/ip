@@ -63,7 +63,7 @@ public class Jackbit {
             } catch (IOException er) {
                 throw new RuntimeException(e);
             }
-            throw new RuntimeException(e);
+            return e.getMessage();
         }
 
         try {
