@@ -83,6 +83,10 @@ public class Task {
         this.done = false;
     }
 
+    public void reschedule(String date){
+
+    }
+
     @Override
     public String toString() {
         String mark = !this.done ? "[ ]" : "[X]";
