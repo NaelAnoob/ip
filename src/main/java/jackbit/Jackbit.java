@@ -57,7 +57,6 @@ public class Jackbit {
 
         try {
             reply = parser.parse(msg);
-
         } catch (JackbitException e) {
             try {
                 storage.save(tasks.getTaskList());
@@ -66,7 +65,6 @@ public class Jackbit {
             }
             throw new RuntimeException(e);
         }
-
 
         try {
             storage.save(tasks.getTaskList());
