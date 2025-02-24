@@ -36,10 +36,13 @@ public class Parser {
         } else if (command.equals("bye")) {
             reply = leave();
         } else if (command.startsWith("mark")) {
+            assert command.split("\\W+").length < 2: "Only two words in the command";
             reply = markTask(command);
         } else if (command.startsWith("unmark")) {
+            assert command.split("\\W+").length < 2: "Only two words in the command";
             reply = unmarkTask(command);
         } else if (command.startsWith("delete")) {
+            assert command.split("\\W+").length < 2: "Only two words in the command";
             reply = deleteTask(command);
         } else if (command.startsWith("todo") || command.startsWith("deadline") || command.startsWith("event")) {
             reply = addTask(command);
