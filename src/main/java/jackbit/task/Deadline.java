@@ -37,6 +37,10 @@ public class Deadline extends Task {
         }
     }
 
+    public void reschedule(String by) {
+        this.by = LocalDate.parse(by);
+    }
+
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + by.format(DateTimeFormatter.ofPattern("MMM d yyyy")) + ")";

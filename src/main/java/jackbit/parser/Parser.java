@@ -48,10 +48,22 @@ public class Parser {
             reply = addTask(command);
         } else if (command.startsWith("find")) {
             reply = findTask(command);
+        } else if (command.startsWith("reschedule")) {
+            reply = rescheduleTask(command);
         } else {
             throw new JackbitException("First rule you learn in clown school: Random gibberish is never funny");
         }
 
+        return reply;
+    }
+
+    private String rescheduleTask(String command) {
+        String reply;
+        int index = Integer.parseInt(command.substring(11).trim()) - 1;
+        Deadline task = (Deadline) taskList.get(index);
+        assert task instanceof Deadline: "Task must be a Deadline task";
+        task.reschedule(command.split("\\W+")[3]);
+        reply = "Your task has been rescheduled. Your new task is: \n" + task;
         return reply;
     }
 
