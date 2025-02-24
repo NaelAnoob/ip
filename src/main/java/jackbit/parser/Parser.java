@@ -50,7 +50,7 @@ public class Parser {
     private void findTask(String command) {
         System.out.println("Here are the matching tasks in your list: \n");
         int k = 1;
-        for (int i = 0; i < taskList.size(); i++) {
+        for (int i = 0; i < taskList.getSize(); i++) {
             Task task = taskList.get(i);
             if (task.getName().contains(command.substring(5))) {
                 System.out.println(k + ". " + taskList.get(i));
