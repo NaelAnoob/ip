@@ -51,42 +51,33 @@ public class Jackbit {
      * Runs the Jackbit application.
      * This method handles the main execution loop and processes user input.
      */
-    public void run() {
+    public String run(String msg) {
         ui.welcome();
-        Scanner chatter = new Scanner(System.in);
-        String msg = chatter.nextLine();
+        String reply;
 
-        while (!msg.equals("bye")) {
+        try {
+            reply = parser.parse(msg);
+
+        } catch (JackbitException e) {
             try {
-                parser.parse(msg);
-                msg = chatter.nextLine();
-            } catch (JackbitException e) {
-                try {
-                    storage.save(tasks.getTaskList());
-                } catch (IOException er) {
-                    throw new RuntimeException(e);
-                }
+                storage.save(tasks.getTaskList());
+            } catch (IOException er) {
                 throw new RuntimeException(e);
             }
+            throw new RuntimeException(e);
         }
 
-        System.out.println("\n ________________________________ \n\n See you later!!");
 
         try {
             storage.save(tasks.getTaskList());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
+        return reply;
     }
 
-    /**
-     * The main method to start the Jackbit application.
-     *
-     * @param args Command-line arguments (not used).
-     */
-    public static void main(String[] args) {
-        new Jackbit("data/jackbit.txt").run();
-    }
+
 
     private void echo(Scanner chatter) {
         String msg = chatter.nextLine();

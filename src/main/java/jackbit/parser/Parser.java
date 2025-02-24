@@ -29,65 +29,83 @@ public class Parser {
      * @param command The user command to parse.
      * @throws JackbitException If the command is invalid or incomplete.
      */
-    public void parse(String command) throws JackbitException {
+    public String parse(String command) throws JackbitException {
+        String reply;
         if (command.equals("list")) {
-            listTasks();
+            reply = listTasks();
+        } else if (command.equals("bye")) {
+            reply = leave();
         } else if (command.startsWith("mark")) {
-            markTask(command);
+            reply = markTask(command);
         } else if (command.startsWith("unmark")) {
-            unmarkTask(command);
+            reply = unmarkTask(command);
         } else if (command.startsWith("delete")) {
-            deleteTask(command);
+            reply = deleteTask(command);
         } else if (command.startsWith("todo") || command.startsWith("deadline") || command.startsWith("event")) {
-            addTask(command);
+            reply = addTask(command);
         } else if (command.startsWith("find")) {
-            findTask(command);
+            reply = findTask(command);
         } else {
             throw new JackbitException("First rule you learn in clown school: Random gibberish is never funny");
         }
+
+        return reply;
     }
 
-    private void findTask(String command) {
-        System.out.println("Here are the matching tasks in your list: \n");
+    private String leave() {
+        return "See you later!!";
+    }
+
+    private String findTask(String command) {
+        String reply = "Here are the matching tasks in your list: \n";
         int k = 1;
         for (int i = 0; i < taskList.getSize(); i++) {
             Task task = taskList.get(i);
             if (task.getName().contains(command.substring(5))) {
-                System.out.println(k + ". " + taskList.get(i));
+                reply = reply + k + ". " + taskList.get(i) + "\n";
                 k++;
             }
         }
+        return reply;
     }
 
-    private void listTasks() {
-        System.out.println("Here are the tasks in your task_list: \n");
+    private String listTasks() {
+        String reply = "Here are the tasks in your task_list: \n";
         for (int i = 0; i < taskList.getSize(); i++) {
-            System.out.println((i + 1) + ". " + taskList.get(i));
+            reply = reply + (i + 1) + ". " + taskList.get(i) + "\n";
         }
+        return reply;
     }
 
-    private void markTask(String command) {
+    private String markTask(String command) {
+        String reply;
         int index = Integer.parseInt(command.substring(5).trim()) - 1;
         Task task = taskList.get(index);
         task.mark();
-        System.out.println("Nice! I've marked this task as done: \n     " + task);
+        reply = "Nice! I've marked this task as done: \n     " + task + "\n";
+        return reply;
     }
 
-    private void unmarkTask(String command) {
+    private String unmarkTask(String command) {
+        String reply;
         int index = Integer.parseInt(command.substring(7).trim()) - 1;
         Task task = taskList.get(index);
         task.unmark();
-        System.out.println("OK, I've marked this task as not done yet: \n     " + task);
+        reply = "OK, I've marked this task as not done yet: \n     " + task + "\n";
+        return reply;
     }
 
-    private void deleteTask(String command) {
+    private String deleteTask(String command) {
+        String reply;
         int index = Integer.parseInt(command.substring(7).trim()) - 1;
         Task task = taskList.get(index);
         taskList.remove(index);
-        System.out.println("I have removed this task from your task_list: \n" + task + "\n The number of tasks you have is " + taskList.getSize());
+        reply = "I have removed this task from your task_list: \n" + task + "\n The number of tasks you have is " + taskList.getSize() + "\n";
+        return reply;
     }
 
-    private void addTask(String command) throws JackbitException {
+    private String addTask(String command) throws JackbitException {
+        String reply;
         if (command.startsWith("todo")) {
             if (command.length() < 6) {
                 throw new JackbitException("You need to wind me up a little more bud. Give me more to work with and write your task fully.");
@@ -112,6 +130,7 @@ public class Parser {
             }
             taskList.add(taskList.getSize(), new Event(parts[0].trim(), parts[1].trim(), parts[2].trim()));
         }
-        System.out.println("I've added this task: \n" + taskList.get(taskList.getSize() - 1) + "\n The number of tasks you have is " + taskList.getSize());
+        reply = "I've added this task: \n" + taskList.get(taskList.getSize() - 1) + "\n The number of tasks you have is " + taskList.getSize() + "\n";
+        return reply;
     }
 }
