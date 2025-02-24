@@ -1,6 +1,6 @@
 package jackbit.gui;
 
-import jackbit.ui.Ui;
+
 import jackbit.Jackbit;
 
 import java.io.IOException;
@@ -16,11 +16,12 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-    private Ui ui;
+
     private Jackbit jackbit = new Jackbit("data/jackbit.txt");;
 
     @Override
     public void start(Stage stage) {
+
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
             AnchorPane ap = fxmlLoader.load();
