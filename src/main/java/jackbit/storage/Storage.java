@@ -32,6 +32,7 @@ public class Storage {
      */
     public ArrayList<Task> load() throws FileNotFoundException {
         File file = new File(filePath);
+
         Scanner s = new Scanner(file);
         int i = 1;
         ArrayList<Task> taskList = new ArrayList<>(100);
