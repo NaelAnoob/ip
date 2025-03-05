@@ -2,18 +2,20 @@ package jackbit.storage;
 
 import jackbit.task.Task;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
  * The Storage class handles loading and saving tasks to a file.
  */
 public class Storage {
-    private String filePath;
+    private Path filePath;
 
     /**
      * Constructs a Storage instance with the specified file path.
@@ -21,27 +23,29 @@ public class Storage {
      * @param filePath The path to the file where tasks are stored.
      */
     public Storage(String filePath) {
-        this.filePath = filePath;
+        this.filePath = Paths.get(filePath);
     }
 
     /**
      * Loads tasks from the file.
      *
      * @return An ArrayList of tasks loaded from the file.
-     * @throws FileNotFoundException If the file does not exist.
+     * @throws IOException If an I/O error occurs.
      */
-    public ArrayList<Task> load() throws FileNotFoundException {
-        File file = new File(filePath);
+    public ArrayList<Task> load() throws IOException {
+        if (!Files.exists(filePath)) {
+            // If the file does not exist, create an empty file and return an empty list
+            Files.createDirectories(filePath.getParent());
+            Files.createFile(filePath);
+            return new ArrayList<>();
+        }
 
-        Scanner s = new Scanner(file);
-        int i = 1;
-        ArrayList<Task> taskList = new ArrayList<>(100);
+        List<String> lines = Files.readAllLines(filePath);
+        ArrayList<Task> taskList = new ArrayList<>(lines.size());
 
-        while (s.hasNext()) {
-            Task task = Task.toTask(s.nextLine());
-            System.out.println(i + ". " + task.toString());
+        for (String line : lines) {
+            Task task = Task.toTask(line);
             taskList.add(task);
-            i++;
         }
 
         return taskList;
@@ -54,7 +58,7 @@ public class Storage {
      * @throws IOException If an I/O error occurs.
      */
     public void save(ArrayList<Task> taskList) throws IOException {
-        FileWriter fileWriter = new FileWriter(filePath);
+        FileWriter fileWriter = new FileWriter(filePath.toFile());
 
         for (Task task : taskList) {
             fileWriter.write(task.toString() + "\n");

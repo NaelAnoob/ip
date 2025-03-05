@@ -43,6 +43,8 @@ public class Jackbit {
             tasks = new TaskList(storage.load());
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         parser = new Parser(tasks);
     }
