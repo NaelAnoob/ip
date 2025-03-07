@@ -9,7 +9,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 /**
  * The Storage class handles loading and saving tasks to a file.
@@ -23,7 +22,9 @@ public class Storage {
      * @param filePath The path to the file where tasks are stored.
      */
     public Storage(String filePath) {
-        this.filePath = Paths.get(filePath);
+        // Use the user's home directory as the base path
+        String userHome = System.getProperty("user.home");
+        this.filePath = Paths.get(userHome, filePath);
     }
 
     /**
@@ -34,7 +35,7 @@ public class Storage {
      */
     public ArrayList<Task> load() throws IOException {
         if (!Files.exists(filePath)) {
-            // If the file does not exist, create an empty file and return an empty list
+            // If the file does not exist, create the directory structure and an empty file
             Files.createDirectories(filePath.getParent());
             Files.createFile(filePath);
             return new ArrayList<>();
